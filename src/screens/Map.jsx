@@ -1,6 +1,5 @@
 import React, { useCallback, useLayoutEffect, useState } from "react"
 import MapView, { Marker } from "react-native-maps"
-
 import { StyleSheet, Alert } from "react-native"
 import CustomMarker from "../components/map/CustomMarker"
 import IconButton from "../components/ui/IconButton"
