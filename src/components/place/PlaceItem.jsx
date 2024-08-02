@@ -1,11 +1,11 @@
 import React from "react"
 import { View, Text, Image, StyleSheet, Pressable } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "../../constants/ThemeProvider" // Import useTheme
+import { useTheme } from "../../constants/ThemeProvider"
 
 function PlaceItem({ place }) {
 	const navigation = useNavigation()
-	const { colors } = useTheme() // Get theme colors
+	const { colors } = useTheme()
 
 	const selectPlaceHandler = () => {
 		navigation.navigate("PlaceDetail", { placeId: place.id })
@@ -24,10 +24,10 @@ function PlaceItem({ place }) {
 				source={{ uri: place.imageUri }}
 			/>
 			<View style={styles.info}>
-				<Text style={[styles.title, { color: colors.primary100 }]}>
+				<Text style={[styles.title, { color: colors.text }]}>
 					{place.title}
 				</Text>
-				<Text style={[styles.address, { color: colors.primary100 }]}>
+				<Text style={[styles.address, { color: colors.text }]}>
 					{place.address}
 				</Text>
 			</View>
@@ -37,24 +37,30 @@ function PlaceItem({ place }) {
 
 const styles = StyleSheet.create({
 	item: {
-		flexDirection: "row",
-		alignItems: "flex-start",
+		flex: 1,
+		flexDirection: "column",
+		alignItems: "center",
 		padding: 10,
-		marginVertical: 8,
+		margin: 10,
 		borderRadius: 10,
+		elevation: 3,
+		shadowColor: "black",
+		shadowOpacity: 0.26,
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 8,
+		overflow: "hidden",
 	},
 	pressed: {
 		opacity: 0.75,
 	},
 	image: {
-		width: 100,
-		height: 100,
+		width: "100%",
+		height: 150,
 		borderRadius: 10,
 	},
 	info: {
-		marginLeft: 12,
-		flex: 1,
-		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 10,
 	},
 	title: {
 		fontSize: 18,
