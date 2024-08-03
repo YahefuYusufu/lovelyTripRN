@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react"
-import { ScrollView, Image, View, Text, StyleSheet } from "react-native"
-import { useTheme } from "../constants/ThemeProvider" // Import useTheme
-import { fetchPlaceDetails } from "../util/database"
+import {
+	ScrollView,
+	Image,
+	View,
+	Text,
+	StyleSheet,
+	FlatList,
+} from "react-native"
+import { useTheme } from "../constants/ThemeProvider"
+import { fetchPlaceDetails, deletePlace } from "../util/database"
 import OutlineButton from "../components/ui/OutlineButton"
 
 function PlaceDetail({ route, navigation }) {
-	const [place, setPlace] = useState()
-	const { colors } = useTheme() // Access theme colors
+	const [place, setPlace] = useState(null)
+	const { colors } = useTheme()
 
 	function showOnMapHandler() {
 		navigation.navigate("Map", {
@@ -32,6 +39,15 @@ function PlaceDetail({ route, navigation }) {
 		loadPlace()
 	}, [selectedPlaceId])
 
+	const deletePlaceHandler = async () => {
+		try {
+			await deletePlace(selectedPlaceId)
+			navigation.goBack()
+		} catch (error) {
+			console.error("Error deleting place:", error)
+		}
+	}
+
 	if (!place) {
 		return (
 			<View style={styles.fallback}>
@@ -40,17 +56,37 @@ function PlaceDetail({ route, navigation }) {
 		)
 	}
 
+	const renderImageItem = ({ item }) => (
+		<Image style={styles.image} source={{ uri: item }} />
+	)
+
 	return (
 		<ScrollView>
-			<Image style={styles.image} source={{ uri: place.imageUri }} />
+			{place.imageUris && place.imageUris.length > 0 ? (
+				<FlatList
+					data={place.imageUris}
+					renderItem={renderImageItem}
+					keyExtractor={(item) => item}
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					style={styles.imageList}
+				/>
+			) : (
+				<Text style={[styles.text, { color: colors.text }]}>
+					No images available.
+				</Text>
+			)}
 			<View style={styles.locationContainer}>
 				<View style={styles.addressContainer}>
-					<Text style={[styles.address, { color: colors.primary500 }]}>
+					<Text style={[styles.address, { color: colors.text }]}>
 						{place.address}
 					</Text>
 				</View>
 				<OutlineButton icon="map" onPress={showOnMapHandler}>
 					View on Map
+				</OutlineButton>
+				<OutlineButton icon="trash" onPress={deletePlaceHandler}>
+					Delete Place
 				</OutlineButton>
 			</View>
 		</ScrollView>
@@ -63,22 +99,33 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
+	imageList: {
+		height: 200,
+	},
 	image: {
-		height: "35%",
-		minHeight: 300,
-		width: "100%",
+		width: 100,
+		height: 100,
+		marginHorizontal: 5,
+		borderRadius: 8,
 	},
 	locationContainer: {
 		justifyContent: "center",
 		alignItems: "center",
+		padding: 20,
 	},
 	addressContainer: {
-		padding: 20,
+		paddingBottom: 20,
 	},
 	address: {
 		textAlign: "center",
 		fontWeight: "bold",
 		fontSize: 16,
+	},
+	text: {
+		fontSize: 16,
+		fontWeight: "bold",
+		textAlign: "center",
+		padding: 20,
 	},
 })
 

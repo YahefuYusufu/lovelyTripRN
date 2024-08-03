@@ -43,7 +43,10 @@ const ToggleButton = () => {
 }
 
 const styles = StyleSheet.create({
-	container: {},
+	container: {
+		marginRight: 10,
+		padding: 10,
+	},
 	button: {
 		padding: 5,
 		borderRadius: 30,

@@ -77,7 +77,9 @@ function LocationPicker({ onPickLocation }) {
 	}
 
 	let locationPreview = (
-		<Text style={{ color: colors.text }}>No location picked yet.</Text>
+		<Text style={{ color: colors.text, fontWeight: "500" }}>
+			No location picked yet.
+		</Text>
 	)
 
 	if (pickedLocation) {

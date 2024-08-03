@@ -19,9 +19,9 @@ export default Button
 const s = StyleSheet.create({
 	button: (colors) => ({
 		paddingHorizontal: 12,
-		paddingVertical: 8,
+		paddingVertical: 12,
 		margin: 4,
-		backgroundColor: colors.primary800, // Use theme color
+		backgroundColor: colors.primary500,
 		elevation: 2,
 		shadowColor: "black",
 		shadowOpacity: 0.15,
@@ -36,8 +36,8 @@ const s = StyleSheet.create({
 	},
 	text: (colors) => ({
 		textAlign: "center",
-		fontSize: 16, // Adjusted font size for better readability
+		fontSize: 16,
 		fontWeight: "bold",
-		color: colors.primary50, // Use theme color
+		color: colors.text,
 	}),
 })

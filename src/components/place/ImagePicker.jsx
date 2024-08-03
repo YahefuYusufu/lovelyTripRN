@@ -5,7 +5,7 @@ import {
 	PermissionStatus,
 } from "expo-image-picker"
 import { Alert, Image, StyleSheet, Text, View } from "react-native"
-import { useTheme } from "../../constants/ThemeProvider" // Import useTheme
+import { useTheme } from "../../constants/ThemeProvider"
 import OutlineButton from "../ui/OutlineButton"
 
 function ImagePicker({ onTakeImage }) {
@@ -72,7 +72,10 @@ function ImagePicker({ onTakeImage }) {
 				style={[styles.imagePreview, { backgroundColor: colors.primary100 }]}>
 				{imagePreview}
 			</View>
-			<OutlineButton icon="camera" onPress={takeImageHandler}>
+			<OutlineButton
+				style={[styles.text]}
+				icon="camera"
+				onPress={takeImageHandler}>
 				Take Image
 			</OutlineButton>
 		</View>
