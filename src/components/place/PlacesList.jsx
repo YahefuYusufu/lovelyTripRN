@@ -25,6 +25,8 @@ function PlacesList({ places }) {
 			data={places}
 			keyExtractor={(item) => item.id}
 			renderItem={({ item }) => <PlaceItem place={item} />}
+			numColumns={2}
+			columnWrapperStyle={styles.columnWrapper}
 		/>
 	)
 }
@@ -38,6 +40,10 @@ const styles = StyleSheet.create({
 	fallbackText: {
 		fontSize: 16,
 		fontWeight: "bold",
+	},
+	columnWrapper: {
+		justifyContent: "space-between",
+		marginHorizontal: 10,
 	},
 })
 
