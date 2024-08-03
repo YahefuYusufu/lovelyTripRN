@@ -37,7 +37,7 @@ function MainApp() {
 
 	if (!colors) {
 		console.error("Colors are undefined. Check your ThemeProvider setup.")
-		return null // or some fallback UI
+		return null
 	}
 
 	return (
