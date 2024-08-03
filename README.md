@@ -1,9 +1,10 @@
 
-# LovelyTrip App
+# Expo App
 
 
-Overview
-My Travel App is a comprehensive travel management application available in multiple platforms. Currently, it is implemented using React Native and Expo, with additional versions developed in SwiftUI for iOS and Jetpack Compose for Android. The app helps users discover, add, and manage their favorite travel places with ease.
+I'm thrilled to share my latest project, a mobile app built using React Native, that showcases how to integrate various powerful technologies like Expo, Google Maps API, and SQLite. This app demonstrates how I implemented these technologies on both Android and iOS platforms. 🌆🗺️
+
+
 
 
 
@@ -22,7 +23,7 @@ LovelyTrip is built using the following tools and libraries:
 
 - **React Native & Expo**: For cross-platform mobile development.
 - **React Navigation**: For navigation within the React Native app.
-- **Expo Image Picker**:  For accessing the device’s camera and photo gallery.
+- **Camera System**:  For accessing the device’s camera and photo gallery.
 - **Expo Location**: For location services and permissions by Google Map.
 - **Splash Screen**: Implemented a splash screen for app loading.
 - **SQlite**: Image loading library for handling image loading and caching efficiently.
@@ -35,17 +36,6 @@ To install LovelyTrip on your Android device, follow these steps:
 2. Open the project in Android Studio.
 3. Connect your Android device.
 4. Build and run the app.
-
-## Usage
-
-Once installed, follow these steps to start using LovelyTrip:
-
-1. Open the app.
-2. Click on the "+" button to add a new trip.
-3. Enter trip details and save.
-4. View and manage your trips from the main screen.
-
-
 
 ## License
 
