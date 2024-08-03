@@ -108,22 +108,25 @@ function ImagePicker({ onTakeImage }) {
 	}
 
 	return (
-		<View>
+		<View style={styles.container}>
 			<View
 				style={[styles.imagePreview, { backgroundColor: colors.primary100 }]}>
 				{imagePreview}
 			</View>
-			<OutlineButton icon="camera" onPress={takeImageHandler}>
-				Take Image
-			</OutlineButton>
-			<OutlineButton icon="image" onPress={pickImageHandler}>
-				Pick Image
-			</OutlineButton>
+			<View style={styles.buttons}>
+				<OutlineButton icon="camera" onPress={takeImageHandler}>
+					Take Image
+				</OutlineButton>
+				{/* <OutlineButton icon="image" onPress={pickImageHandler}>
+					Pick Image
+				</OutlineButton> */}
+			</View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
+	container: {},
 	imagePreview: {
 		width: "100%",
 		height: 200,
@@ -139,6 +142,11 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 16,
 		fontWeight: "bold",
+	},
+	buttons: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignContent: "space-between",
 	},
 })
 

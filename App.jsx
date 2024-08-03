@@ -11,8 +11,11 @@ import Map from "./src/screens/Map"
 import { init } from "./src/util/database"
 import IconButton from "./src/components/ui/IconButton"
 import ToggleButton from "./src/components/ui/ToggleButton"
+import * as SplashScreen from "expo-splash-screen"
 
 const Stack = createNativeStackNavigator()
+
+SplashScreen.preventAutoHideAsync()
 
 function MainApp() {
 	const [dbInitialized, setDbInitialized] = useState(false)
