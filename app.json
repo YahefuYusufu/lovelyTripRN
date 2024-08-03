@@ -13,14 +13,22 @@
 			"backgroundColor": "#ffffff"
 		},
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"infoPlist": {
+				"NSCameraUsageDescription": "The app needs access to your camera to take photos.",
+				"NSPhotoLibraryUsageDescription": "The app needs access to your photo library to select images."
+			}
 		},
-		"assetBundlePatterns": ["**/*"],
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./src/assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
-			}
+			},
+			"permissions": [
+				"CAMERA",
+				"READ_EXTERNAL_STORAGE",
+				"WRITE_EXTERNAL_STORAGE"
+			]
 		},
 		"web": {
 			"favicon": "./src/assets/favicon.png"
@@ -29,7 +37,8 @@
 			[
 				"expo-image-picker",
 				{
-					"cameraPermission": "The app needs access to your camera in order to take photos of your favorite places."
+					"cameraPermission": "The app needs access to your camera to take photos.",
+					"mediaLibraryPermission": "The app needs access to your media library to select images."
 				}
 			]
 		]

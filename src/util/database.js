@@ -11,24 +11,24 @@ export async function init() {
 	const db = await SQLite.openDatabaseAsync("places.db")
 
 	await db.execAsync(`
-		  PRAGMA journal_mode = WAL;
+    PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS places (
       id INTEGER PRIMARY KEY NOT NULL,
       title TEXT NOT NULL,
-      imageUri TEXT NOT NULL,
+      imageUris TEXT NOT NULL, -- Changed column name to imageUris
       address TEXT NOT NULL,
       lat REAL NOT NULL,
       lng REAL NOT NULL
     );
-		`)
+  `)
 }
 
 export async function insertPlace(place) {
 	const db = await SQLite.openDatabaseAsync("places.db")
 	const result = await db.runAsync(
-		"INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)",
+		"INSERT INTO places (title, imageUris, address, lat, lng) VALUES (?, ?, ?, ?, ?)",
 		place.title,
-		place.imageUri,
+		JSON.stringify(place.imageUris), // Store as JSON
 		place.address,
 		place.location.lat,
 		place.location.lng
@@ -39,13 +39,19 @@ export async function insertPlace(place) {
 export async function fetchPlaces() {
 	const db = await SQLite.openDatabaseAsync("places.db")
 	const allRows = await db.getAllAsync("SELECT * FROM places")
-	return allRows
+	return allRows.map((row) => ({
+		...row,
+		imageUris: JSON.parse(row.imageUris), // Parse JSON
+	}))
 }
 
 export async function fetchPlace(id) {
 	const db = await SQLite.openDatabaseAsync("places.db")
 	const place = await db.getFirstAsync("SELECT * FROM places WHERE id = ?", id)
-	return place
+	return {
+		...place,
+		imageUris: JSON.parse(place.imageUris), // Parse JSON
+	}
 }
 
 // Fetch place details by its ID
@@ -63,7 +69,7 @@ export async function fetchPlaceDetails(id) {
 
 		return new Place(
 			placeData.title,
-			placeData.imageUri,
+			JSON.parse(placeData.imageUris), // Parse JSON
 			{
 				lat: placeData.lat,
 				lng: placeData.lng,
@@ -75,4 +81,10 @@ export async function fetchPlaceDetails(id) {
 		console.error("Error fetching place details:", error)
 		throw error
 	}
+}
+
+// Function to delete a place
+export async function deletePlace(id) {
+	const db = await SQLite.openDatabaseAsync("places.db")
+	await db.runAsync("DELETE FROM places WHERE id = ?", id)
 }
