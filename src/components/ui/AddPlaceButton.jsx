@@ -1,16 +1,16 @@
 import React from "react"
-import IconButton from "./IconButton" // Import your existing IconButton component
+import IconButton from "./IconButton"
 import { useTheme } from "../../constants/ThemeProvider"
 
 const AddPlaceButton = ({ navigation }) => {
-	const { colors } = useTheme() // Get colors from the ThemeProvider
+	const { colors } = useTheme()
 
 	return (
 		<IconButton
-			icon="airplane-plus" // Icon name or type
-			size={28} // Size of the icon
-			color={colors.gray700} // Color from theme
-			onPress={() => navigation.navigate("AddPlace")} // Navigate to AddPlace screen
+			icon="airplane-plus"
+			size={28}
+			color={colors.gray700}
+			onPress={() => navigation.navigate("AddPlace")}
 		/>
 	)
 }

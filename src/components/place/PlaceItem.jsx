@@ -27,9 +27,9 @@ function PlaceItem({ place }) {
 				<Text style={[styles.title, { color: colors.text }]}>
 					{place.title}
 				</Text>
-				<Text style={[styles.address, { color: colors.text }]}>
+				{/* <Text style={[styles.address, { color: colors.text }]}>
 					{place.address}
-				</Text>
+				</Text> */}
 			</View>
 		</Pressable>
 	)
@@ -40,11 +40,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "column",
 		alignItems: "center",
-		padding: 10,
-		margin: 10,
+		padding: 4,
+		marginTop: 10,
+		marginHorizontal: 5,
+		height: 200,
 		borderRadius: 10,
 		elevation: 3,
-		shadowColor: "black",
+		shadowColor: "white",
 		shadowOpacity: 0.26,
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 8,
@@ -64,10 +66,12 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 18,
+
 		fontWeight: "bold",
 	},
 	address: {
 		fontSize: 14,
+		marginTop: 5,
 	},
 })
 

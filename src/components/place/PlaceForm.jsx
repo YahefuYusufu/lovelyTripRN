@@ -1,6 +1,13 @@
 import React, { useCallback, useState } from "react"
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
-import { useTheme } from "../../constants/ThemeProvider" // Import useTheme
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
+	Alert,
+} from "react-native"
+import { useTheme } from "../../constants/ThemeProvider"
 import ImagePicker from "./ImagePicker"
 import LocationPicker from "./LocationPicker"
 import Button from "../ui/Button"
@@ -9,9 +16,9 @@ import { Place } from "../../models/place"
 const PlaceForm = ({ onCreatePlace }) => {
 	const [enteredTitle, setEnteredTitle] = useState("")
 	const [selectedImage, setSelectedImage] = useState()
-	const [pickedLocation, setPickedLocation] = useState()
+	const [pickedLocation, setPickedLocation] = useState({}) // Initialize as an empty object
 
-	const { colors } = useTheme() // Get theme colors
+	const { colors } = useTheme()
 
 	const changeTitleHandler = (enteredText) => {
 		setEnteredTitle(enteredText)
@@ -26,6 +33,12 @@ const PlaceForm = ({ onCreatePlace }) => {
 	}, [])
 
 	const SavePlaceHandler = () => {
+		if (!enteredTitle || !selectedImage) {
+			Alert.alert("Missing Information", "Please provide title and image.")
+			return
+		}
+
+		// Create Place instance, pickedLocation is always an object
 		const placeData = new Place(enteredTitle, selectedImage, pickedLocation)
 		onCreatePlace(placeData)
 		console.log(placeData)

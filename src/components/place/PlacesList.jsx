@@ -41,10 +41,6 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: "bold",
 	},
-	columnWrapper: {
-		justifyContent: "space-between",
-		marginHorizontal: 10,
-	},
 })
 
 export default PlacesList

@@ -6,7 +6,7 @@ export const LightColors = {
 	primary500: "#1aacf0",
 	primary700: "#0570c9",
 	primary800: "#003b88",
-	accent500: "#e6b30b",
+	accent500: "#174f0d",
 	gray700: "#221c30",
 	background: "#ffffff", // Light theme background color
 	text: "#000000", // Light theme text color

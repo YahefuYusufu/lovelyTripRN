@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { ScrollView, Image, View, Text, StyleSheet } from "react-native"
-import { useTheme } from "../constants/ThemeProvider" // Import useTheme
-import { fetchPlaceDetails } from "../util/database"
+import { ScrollView, Image, View, Text, StyleSheet, Alert } from "react-native"
+import { fetchPlaceDetails, fetchPlace, deletePlace } from "../util/database"
 import OutlineButton from "../components/ui/OutlineButton"
 
 function PlaceDetail({ route, navigation }) {
 	const [place, setPlace] = useState()
-	const { colors } = useTheme() // Access theme colors
 
 	function showOnMapHandler() {
 		navigation.navigate("Map", {
@@ -40,18 +38,46 @@ function PlaceDetail({ route, navigation }) {
 		)
 	}
 
+	const deleteHandler = async () => {
+		Alert.alert("Are you sure?", "Do you really want to delete this place?", [
+			{
+				text: "Cancel",
+				style: "cancel",
+			},
+			{
+				text: "Delete",
+				style: "destructive",
+				onPress: async () => {
+					try {
+						await deletePlace(selectedPlaceId)
+						navigation.goBack() // Navigate back after deletion
+					} catch (error) {
+						console.error("Error deleting place:", error)
+						Alert.alert("Error", "Could not delete place.")
+					}
+				},
+			},
+		])
+	}
+
 	return (
 		<ScrollView>
 			<Image style={styles.image} source={{ uri: place.imageUri }} />
 			<View style={styles.locationContainer}>
 				<View style={styles.addressContainer}>
-					<Text style={[styles.address, { color: colors.primary500 }]}>
-						{place.address}
-					</Text>
+					<Text style={styles.address}>{place.address}</Text>
 				</View>
-				<OutlineButton icon="map" onPress={showOnMapHandler}>
-					View on Map
-				</OutlineButton>
+				<View style={styles.buttons}>
+					<OutlineButton icon="map" onPress={showOnMapHandler}>
+						View on Map
+					</OutlineButton>
+					<OutlineButton
+						icon="trash"
+						onPress={deleteHandler}
+						style={styles.deleteButton}>
+						Delete
+					</OutlineButton>
+				</View>
 			</View>
 		</ScrollView>
 	)
@@ -79,6 +105,12 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 		fontSize: 16,
+	},
+	buttons: {
+		flexDirection: "row",
+	},
+	deleteButton: {
+		marginLeft: 10,
 	},
 })
 

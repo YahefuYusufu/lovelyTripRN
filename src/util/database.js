@@ -76,3 +76,10 @@ export async function fetchPlaceDetails(id) {
 		throw error
 	}
 }
+
+// Delete a place from the database
+// Function to delete a place
+export async function deletePlace(id) {
+	const db = await SQLite.openDatabaseAsync("places.db")
+	await db.runAsync("DELETE FROM places WHERE id = ?", id)
+}

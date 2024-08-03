@@ -18,11 +18,9 @@ const OutlineButton = ({ onPress, icon, children }) => {
 				name={icon}
 				size={18}
 				color={colors.primary500}
-				style={styles.icon}
+				style={[styles.icon, { color: colors.accent500 }]}
 			/>
-			<Text style={[styles.text, { color: colors.primary500 }]}>
-				{children}
-			</Text>
+			<Text style={[styles.text, { color: colors.text }]}>{children}</Text>
 		</Pressable>
 	)
 }
@@ -36,6 +34,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		borderWidth: 1,
+		borderRadius: 5,
 	},
 	pressed: {
 		opacity: 0.7,
@@ -43,7 +42,9 @@ const styles = StyleSheet.create({
 	icon: {
 		marginRight: 6,
 	},
-	text: {},
+	text: {
+		fontWeight: "bold",
+	},
 })
 
 export default OutlineButton
