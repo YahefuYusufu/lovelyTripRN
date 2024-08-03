@@ -1,5 +1,12 @@
 import React, { useCallback, useState } from "react"
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
+	Alert,
+} from "react-native"
 import { useTheme } from "../../constants/ThemeProvider"
 import ImagePicker from "./ImagePicker"
 import LocationPicker from "./LocationPicker"
@@ -8,8 +15,8 @@ import { Place } from "../../models/place"
 
 const PlaceForm = ({ onCreatePlace }) => {
 	const [enteredTitle, setEnteredTitle] = useState("")
-	const [selectedImages, setSelectedImages] = useState([])
-	const [pickedLocation, setPickedLocation] = useState()
+	const [selectedImage, setSelectedImage] = useState()
+	const [pickedLocation, setPickedLocation] = useState({}) // Initialize as an empty object
 
 	const { colors } = useTheme()
 
@@ -17,25 +24,30 @@ const PlaceForm = ({ onCreatePlace }) => {
 		setEnteredTitle(enteredText)
 	}
 
-	const addImageHandler = (imageUri) => {
-		setSelectedImages((currentImages) => [...currentImages, imageUri])
+	const TakeImageHandler = (imageUri) => {
+		setSelectedImage(imageUri)
 	}
 
 	const pickLocationHandler = useCallback((location) => {
 		setPickedLocation(location)
 	}, [])
 
-	const savePlaceHandler = () => {
-		const placeData = new Place(enteredTitle, selectedImages, pickedLocation)
+	const SavePlaceHandler = () => {
+		if (!enteredTitle || !selectedImage) {
+			Alert.alert("Missing Information", "Please provide title and image.")
+			return
+		}
+
+		// Create Place instance, pickedLocation is always an object
+		const placeData = new Place(enteredTitle, selectedImage, pickedLocation)
 		onCreatePlace(placeData)
+		console.log(placeData)
 	}
 
 	return (
-		<ScrollView
-			style={[styles.form, { backgroundColor: colors.background }]}
-			contentContainerStyle={{ paddingBottom: 20 }}>
-			<View style={styles.inputContainer}>
-				<Text style={[styles.label, { color: colors.text }]}>City Name</Text>
+		<ScrollView style={[styles.form, { backgroundColor: colors.background }]}>
+			<View>
+				<Text style={[styles.label, { color: colors.primary500 }]}>Form</Text>
 				<TextInput
 					style={[
 						styles.input,
@@ -46,15 +58,11 @@ const PlaceForm = ({ onCreatePlace }) => {
 					]}
 					onChangeText={changeTitleHandler}
 					value={enteredTitle}
-					placeholder="Enter city name..."
-					placeholderTextColor={colors.primary500}
 				/>
 			</View>
-			<ImagePicker onTakeImage={addImageHandler} />
+			<ImagePicker onTakeImage={TakeImageHandler} />
 			<LocationPicker onPickLocation={pickLocationHandler} />
-			<View style={styles.buttonContainer}>
-				<Button onPress={savePlaceHandler}>Add Place</Button>
-			</View>
+			<Button onPress={SavePlaceHandler}>Add Place</Button>
 		</ScrollView>
 	)
 }
@@ -64,23 +72,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 24,
 	},
-	inputContainer: {
-		marginBottom: 16,
-	},
 	label: {
 		fontWeight: "bold",
-		marginBottom: 8,
-		fontSize: 18,
+		marginBottom: 4,
 	},
 	input: {
-		paddingHorizontal: 12,
+		marginVertical: 8,
+		paddingHorizontal: 4,
 		paddingVertical: 8,
 		fontSize: 16,
 		borderBottomWidth: 2,
-		borderRadius: 6,
-	},
-	buttonContainer: {
-		marginTop: 20,
 	},
 })
 

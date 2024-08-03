@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react"
-import {
-	ScrollView,
-	Image,
-	View,
-	Text,
-	StyleSheet,
-	Dimensions,
-} from "react-native"
-import { useTheme } from "../constants/ThemeProvider"
-import { fetchPlaceDetails, deletePlace } from "../util/database"
+import { ScrollView, Image, View, Text, StyleSheet, Alert } from "react-native"
+import { fetchPlaceDetails, fetchPlace, deletePlace } from "../util/database"
 import OutlineButton from "../components/ui/OutlineButton"
 
-const PlaceDetail = ({ route, navigation }) => {
+function PlaceDetail({ route, navigation }) {
 	const [place, setPlace] = useState()
-	const { colors } = useTheme()
-	const { placeId } = route.params
 
+	function showOnMapHandler() {
+		navigation.navigate("Map", {
+			initialLat: place.location.lat,
+			initialLng: place.location.lng,
+		})
+	}
+
+	const selectedPlaceId = route.params.placeId
 	useEffect(() => {
 		async function loadPlace() {
+			const place = await fetchPlaceDetails(selectedPlaceId)
 			try {
-				const place = await fetchPlaceDetails(placeId)
 				setPlace(place)
 				navigation.setOptions({
 					title: place.title,
@@ -30,16 +28,7 @@ const PlaceDetail = ({ route, navigation }) => {
 		}
 
 		loadPlace()
-	}, [placeId])
-
-	const handleDelete = async () => {
-		try {
-			await deletePlace(placeId)
-			navigation.goBack()
-		} catch (error) {
-			console.error("Error deleting place:", error)
-		}
-	}
+	}, [selectedPlaceId])
 
 	if (!place) {
 		return (
@@ -49,35 +38,46 @@ const PlaceDetail = ({ route, navigation }) => {
 		)
 	}
 
+	const deleteHandler = async () => {
+		Alert.alert("Are you sure?", "Do you really want to delete this place?", [
+			{
+				text: "Cancel",
+				style: "cancel",
+			},
+			{
+				text: "Delete",
+				style: "destructive",
+				onPress: async () => {
+					try {
+						await deletePlace(selectedPlaceId)
+						navigation.goBack() // Navigate back after deletion
+					} catch (error) {
+						console.error("Error deleting place:", error)
+						Alert.alert("Error", "Could not delete place.")
+					}
+				},
+			},
+		])
+	}
+
 	return (
 		<ScrollView>
-			<ScrollView
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				style={styles.imageScrollContainer}>
-				{place.imageUris.map((uri, index) => (
-					<Image key={index} style={styles.image} source={{ uri }} />
-				))}
-			</ScrollView>
+			<Image style={styles.image} source={{ uri: place.imageUri }} />
 			<View style={styles.locationContainer}>
 				<View style={styles.addressContainer}>
-					<Text style={[styles.address, { color: colors.text }]}>
-						{place.address}
-					</Text>
+					<Text style={styles.address}>{place.address}</Text>
 				</View>
-				<OutlineButton
-					icon="map"
-					onPress={() =>
-						navigation.navigate("Map", {
-							initialLat: place.location.lat,
-							initialLng: place.location.lng,
-						})
-					}>
-					View on Map
-				</OutlineButton>
-				<OutlineButton icon="trash" onPress={handleDelete}>
-					Delete Place
-				</OutlineButton>
+				<View style={styles.buttons}>
+					<OutlineButton icon="map" onPress={showOnMapHandler}>
+						View on Map
+					</OutlineButton>
+					<OutlineButton
+						icon="trash"
+						onPress={deleteHandler}
+						style={styles.deleteButton}>
+						Delete
+					</OutlineButton>
+				</View>
 			</View>
 		</ScrollView>
 	)
@@ -89,13 +89,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
-	imageScrollContainer: {
-		height: 200,
-	},
 	image: {
-		width: Dimensions.get("window").width,
-		height: "100%",
-		resizeMode: "cover",
+		height: "35%",
+		minHeight: 300,
+		width: "100%",
 	},
 	locationContainer: {
 		justifyContent: "center",
@@ -108,6 +105,12 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 		fontSize: 16,
+	},
+	buttons: {
+		flexDirection: "row",
+	},
+	deleteButton: {
+		marginLeft: 10,
 	},
 })
 
